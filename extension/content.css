@@ -1,0 +1,41 @@
+#krill-scout {
+  position: fixed;
+  top: 72px;
+  right: 12px;
+  z-index: 2147483647;
+  width: 240px;
+  max-width: calc(100vw - 24px);
+  background: rgba(6, 18, 40, 0.94);
+  border: 1px solid #2c5a8c;
+  border-radius: 10px;
+  color: #dfefff;
+  font: 13px/1.35 ui-monospace, Menlo, monospace;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+}
+#krill-scout .ks-head {
+  padding: 8px 10px;
+  border-bottom: 1px solid #1d3d63;
+  color: #ff7a9a;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+#krill-scout .ks-body { padding: 8px; display: grid; gap: 4px; }
+#krill-scout .ks-pick {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #0e2a52;
+}
+#krill-scout .ks-pick:hover, #krill-scout .ks-pick:focus-visible { background: #17407a; outline: 1px solid #4de3ff; }
+#krill-scout .ks-pick span { color: #8fb4d9; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#krill-scout .ks-hint { color: #8fb4d9; font-size: 11px; }
+#krill-scout .ks-error { color: #ff8a8a; }
+#krill-scout .ks-tier { color: #8fb4d9; }
+#krill-scout .ks-deepcut, #krill-scout .ks-krillion { color: #4de3ff; }
+#krill-scout .ks-rare { color: #9fe39a; }
+#krill-scout .ks-tooclever { color: #ffb36b; }

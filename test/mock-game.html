@@ -1,0 +1,37 @@
+<!doctype html><meta charset="utf-8"><title>Mock Krillion</title>
+<body style="background:#06203f;color:#fff;font-family:monospace">
+<div class="prompt">Name an English word containing “ough”</div>
+<div id="slot"></div>
+<button id="next" type="button">next prompt</button>
+<button id="submit" type="button">fake submit</button>
+<link rel="stylesheet" href="../extension/content.css?v=1">
+<script>
+// Stand-ins for the extension APIs, so the real extension files run unchanged on this page.
+const store = { autoType: true };
+window.chrome = {
+  storage: { local: {
+    get: async (k) => (typeof k === "string" ? { [k]: store[k] } : Object.fromEntries(k.map((x) => [x, store[x]]))),
+    set: async (o) => Object.assign(store, o),
+  } },
+  runtime: { getURL: (p) => "../extension/" + p },
+};
+// Like the game: the answer box appears after a 3 s countdown.
+function showBox() {
+  document.getElementById("slot").innerHTML = "";
+  setTimeout(() => (document.getElementById("slot").innerHTML =
+    '<input aria-label="Your answer"><button class="ds-dive-btn" type="button">DIVE</button>'), 3000);
+}
+const prompts = ["Name a country whose name starts with S", "Name a car brand that no longer exists", "Name a kind of knot", "Name a soup"];
+document.getElementById("next").onclick = () => { document.querySelector(".prompt").textContent = prompts.shift() || "done"; showBox(); };
+// Mimics the game's /submit reply so results.js and the learning path run.
+document.getElementById("submit").onclick = () => fetch("/submit", { method: "POST", body: JSON.stringify({ answer: document.querySelector("input").value }) });
+showBox();
+</script>
+<script>
+const realFetch2 = window.fetch;
+window.fetch = (u, i) => (String(u).endsWith("/submit") ? Promise.resolve(new Response(JSON.stringify({ accepted: true, tier: "deepcut" }))) : realFetch2(u, i));
+</script>
+<script>
+// Loads the real extension files fresh each time (no stale cached copies).
+for (const f of ["results", "model", "content"]) document.write(`<script src="../extension/${f}.js?v=${Date.now()}"><\/script>`);
+</script>
