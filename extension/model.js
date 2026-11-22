@@ -105,6 +105,13 @@ class KrillModel {
     if (m) rules.minLength = Number(m[1]) || NUMBER_WORDS[m[1]] || null;
     m = p.match(/\b(\d+|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[ -]letters?\b/);
     if (m && !rules.minLength) rules.length = Number(m[1]) || NUMBER_WORDS[m[1]];
+    // 'with "and" in its name', 'has the letter B in its name', 'with both a U and an S in its name'.
+    m = p.match(/\b(?:with|has|having) both (?:an? )?([a-z]) and (?:an? )?([a-z]) in (?:its|their|the) name/);
+    if (m) rules.contains.push(m[1], m[2]);
+    else {
+      m = p.match(/\b(?:with|has|having) (?:the letters? |the word |an? )?([a-z]+) in (?:its|their|the) name/);
+      if (m) rules.contains.push(m[1]);
+    }
     for (const x of p.matchAll(/(?:without|no|not containing)\s+(?:the letter|an?)\s+[“"']?([a-z])\b/g)) rules.excludes.push(x[1]);
     const hasLetterRule = rules.contains.length || rules.startsWith || rules.endsWith || rules.length || rules.minLength;
     rules.wordPrompt = /\bword\b/.test(p) && Boolean(hasLetterRule);

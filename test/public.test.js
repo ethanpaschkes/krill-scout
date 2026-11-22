@@ -42,3 +42,11 @@ test("the public build carries no autoplay and no past-answer lists", () => {
   const data = JSON.parse(fs.readFileSync(path.join(EXT, "data/krillion.json"), "utf8"));
   assert.strictEqual(data.prompts.length, 0);
 });
+
+test("reads 'X in its name' rules", async () => {
+  const m = await ready;
+  const and = m.parseRules('Name a country with "and" in its name');
+  assert.ok(!m.fits("Palau", and));
+  assert.ok(m.fits("Saint Kitts and Nevis", and));
+  assert.deepStrictEqual(m.parseRules("Name a country with both a U and an S in its name").contains, ["u", "s"]);
+});

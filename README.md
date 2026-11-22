@@ -6,12 +6,13 @@ For every prompt, Krill Scout shows 10 rare answers that still count and types t
 
 ![Krill Scout showing 10 picks for "Name a car brand"](docs/screenshot.png)
 
-- **Instant on most prompts.** A built-in bank of 9,420 rare, real answers covers 361 common topics, from car brands to Beatles songs. In tests on past prompts, 87% of its picks with a known result scored Deep Cut or better.
+- **Instant on common topics.** A built-in bank of 9,420 rare, real answers covers 361 topics, from car brands to Beatles songs, and skips the answers the crowd always gives.
 - **Letter prompts too.** "Containing ough" and "five letters starting with Q" are answered from a real dictionary in under a tenth of a second.
 - **Anything else:** Chrome's free built-in AI (Gemini Nano, on your computer) adds ideas in about 2 seconds, fact-checks them, and Krill Scout ranks them by rarity.
 - **Its own rarity model.** Trained on the real tiers of hundreds of past prompts. It knows the answers everyone says (Toyota, Paris, Ramen) and steers away from them.
 - **Learns from your games.** Every answer you submit shows the tier you got, and Krill Scout adjusts.
 - **Keys 1-9 and 0** swap in any of the 10 picks.
+- **There is a cheat code.** Find it and the 🦐 menu unlocks 🔱 Deep Dive: only the picks the model rates as likely Deep Cuts. In a test on 40 dives it had never seen, picks it rated 70%+ really were Deep Cuts about 3 times as often as an average accepted answer.
 - **Private.** No server, no account, no key, no tracking. See the [privacy policy](https://krill-scout-ai.netlify.app/privacy.html).
 
 ## Install

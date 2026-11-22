@@ -7,7 +7,8 @@
 <link rel="stylesheet" href="../extension/content.css?v=1">
 <script>
 // Stand-ins for the extension APIs, so the real extension files run unchanged on this page.
-const store = { autoType: true };
+const deep = location.search.includes("deep");
+const store = { autoType: true, deepUnlocked: deep, deepMode: deep };
 window.chrome = {
   storage: { local: {
     get: async (k) => (typeof k === "string" ? { [k]: store[k] } : Object.fromEntries(k.map((x) => [x, store[x]]))),
@@ -21,7 +22,7 @@ function showBox() {
   setTimeout(() => (document.getElementById("slot").innerHTML =
     '<input aria-label="Your answer"><button class="ds-dive-btn" type="button">DIVE</button>'), 3000);
 }
-const prompts = ["Name a country whose name starts with S", "Name a car brand that no longer exists", "Name a kind of knot", "Name a soup"];
+const prompts = ["Name a car brand", "Name a country whose name starts with S", "Name a noodle dish"];
 document.getElementById("next").onclick = () => { document.querySelector(".prompt").textContent = prompts.shift() || "done"; showBox(); };
 // Mimics the game's /submit reply so results.js and the learning path run.
 document.getElementById("submit").onclick = () => fetch("/submit", { method: "POST", body: JSON.stringify({ answer: document.querySelector("input").value }) });

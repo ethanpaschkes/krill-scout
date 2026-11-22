@@ -10,6 +10,12 @@
   .label { color: #8fb4d9; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
   button { margin-top: 8px; width: 100%; padding: 8px; border: 0; border-radius: 6px; background: #ff5278; color: #fff; font-weight: 600; cursor: pointer; }
   button.ghost { background: transparent; border: 1px solid #2c5a8c; color: #dfefff; }
+  [hidden] { display: none !important; }
+  .code { display: flex; gap: 6px; margin-top: 6px; }
+  .code input { flex: 1; min-width: 0; padding: 7px 8px; border: 1px solid #2c5a8c; border-radius: 6px; background: #061228; color: #dfefff; font: inherit; text-transform: uppercase; }
+  .code button { width: auto; margin: 0; padding: 7px 10px; }
+  #codeMsg { margin-top: 6px; color: #8fb4d9; }
+  #codeMsg.ok { color: #4de3ff; }
   small { display: block; margin-top: 8px; color: #8fb4d9; }
 </style>
 </head>
@@ -24,6 +30,12 @@
     <div class="label">Learned from your games</div>
     <div id="stats">No results yet. Play a dive and it starts learning.</div>
     <button id="reset" class="ghost" hidden>Forget what it learned</button>
+  </div>
+  <div class="box">
+    <div class="label">Cheat code</div>
+    <form class="code" id="codeForm"><input id="code" placeholder="Enter a code" autocomplete="off" spellcheck="false"><button>Enter</button></form>
+    <div id="codeMsg" hidden></div>
+    <div class="row" id="deepRow" hidden><input id="deep" type="checkbox"><label for="deep">🔱 Deep Dive: only picks likely to be Deep Cuts</label></div>
   </div>
   <div class="row"><input id="auto" type="checkbox"><label for="auto">Type the top pick into the box</label></div>
   <small>Free. No key, no account. Everything runs on your computer.</small>

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Krill Scout",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Free Krillion helper: 10 rare answers for every prompt from its own rarity model, an answer bank and Chrome's built-in AI.",
   "minimum_chrome_version": "138",
   "icons": {

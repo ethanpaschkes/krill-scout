@@ -90,7 +90,7 @@ async function factCheck(prompt, ideas, signal) {
 // Krillion asked this exact prompt in a past daily dive: its real One in a Krillion answers first, then real Deep Cuts.
 function pastPicks(past, rules) {
   const gems = past.gem.map((gem) => ({ answer: gem.replace(/\s*\(.*?\)\s*/g, " ").trim(), tier: "krillion", past: "One in a Krillion last time" }));
-  const deep = model.rank(past.deep, rules).map((p) => ({ ...p, tier: "deepcut", past: "Deep Cut last time" }));
+  const deep = model.rank(past.deep, rules).map((p) => ({ ...p, tier: "deepcut", deep: 1, past: "Deep Cut last time" }));
   return model.pickTop([...gems, ...deep]);
 }
 
@@ -203,14 +203,27 @@ function update(prompt, picks, source, final = true) {
 
 const PICKS = 10;
 
+// Deep Dive mode (unlocked with a cheat code in the 🦐 menu): only picks the model rates as likely Deep Cuts.
+// On 40 dives it never saw, picks rated 45%+ were real Deep Cuts about twice as often as average, 70%+ about 3x.
+const DEEP_MIN = 0.45;
+let deepMode = false;
+const readDeepMode = () =>
+  chrome.storage.local.get(["deepMode", "deepUnlocked"]).then((s) => (deepMode = s.deepUnlocked === true && s.deepMode === true));
+readDeepMode();
+chrome.storage.onChanged?.addListener((c) => (c.deepMode || c.deepUnlocked) && readDeepMode());
+
+// The final 10 from a ranked list. In Deep Dive mode: only likely Deep Cuts, the most likely first.
+function finish(ranked) {
+  if (!deepMode) return model.pickTop(ranked, PICKS);
+  const deepness = (r) => (r.tier === "krillion" ? 2 : r.deep ?? 0);
+  return model.pickTop(ranked.filter((r) => deepness(r) >= DEEP_MIN).sort((a, b) => deepness(b) - deepness(a)), PICKS);
+}
+
 // Ranks two lists together: `sure` answers (answer bank, past dives) and `maybe` ones (AI ideas, loose matches).
 function best(sure, maybe, rules) {
   const ranked = [...model.rank(sure, rules, { trusted: true }), ...model.rank(maybe, rules)];
   const seen = new Set();
-  return model.pickTop(
-    ranked.sort((a, b) => b.expected - a.expected).filter((r) => !seen.has(r.answer.toLowerCase()) && seen.add(r.answer.toLowerCase())),
-    PICKS
-  );
+  return finish(ranked.sort((a, b) => b.expected - a.expected).filter((r) => !seen.has(r.answer.toLowerCase()) && seen.add(r.answer.toLowerCase())));
 }
 
 async function getPicks(prompt, signal) {
@@ -223,13 +236,17 @@ async function getPicks(prompt, signal) {
     // Skip near-copies of the leading answers too ("Sao Tome" next to "Sao Tome and Principe").
     const stem = (p) => p.answer.toLowerCase().replace(/[^a-z]/g, "").slice(0, 5);
     const taken = new Set(lead.map(stem));
-    update(prompt, [...lead, ...picks.filter((p) => !taken.has(stem(p)))].slice(0, PICKS), source, final);
+    const list = [...lead, ...picks.filter((p) => !taken.has(stem(p)))].slice(0, PICKS);
+    if (!list.length && final && deepMode && prompt === lastPrompt) {
+      return setBody(`<div class="ks-error">No likely Deep Cuts for this one. Turn off Deep Dive in the 🦐 menu for more picks.</div>`);
+    }
+    update(prompt, list, deepMode ? `🔱 Deep Dive · ${source}` : source, final);
   };
   if (lead.length) {
     show([], "from a past Krillion dive", true);
     if (lead.length >= PICKS) return;
   }
-  if (rules.wordPrompt) return show(model.pickTop(model.rankDictionary(rules), PICKS), "from the dictionary", true);
+  if (rules.wordPrompt) return show(finish(model.rankDictionary(rules)), "from the dictionary", true);
 
   // Instant: the answer bank (~360 topics) and close past prompts. `sure` = the topic covers the whole prompt.
   const topic = model.matchTopic(prompt);
