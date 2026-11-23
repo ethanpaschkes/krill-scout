@@ -12,7 +12,7 @@ For every prompt, Krill Scout shows 10 rare answers that still count and types t
 - **Its own rarity model.** Trained on the real tiers of hundreds of past prompts. It knows the answers everyone says (Toyota, Paris, Ramen) and steers away from them.
 - **Learns from your games.** Every answer you submit shows the tier you got, and Krill Scout adjusts.
 - **Keys 1-9 and 0** swap in any of the 10 picks.
-- **There is a cheat code.** Find it and the 🦐 menu unlocks 🔱 Deep Dive: only the picks the model rates as likely Deep Cuts. In a test on 40 dives it had never seen, picks it rated 70%+ really were Deep Cuts about 3 times as often as an average accepted answer.
+- **🔱 Deep Dive mode.** One switch in the 🦐 menu: only the picks the model rates as likely Deep Cuts. In a test on 40 dives it had never seen, picks it rated 70%+ really were Deep Cuts about 3 times as often as an average accepted answer.
 - **Private.** No server, no account, no key, no tracking. See the [privacy policy](https://krill-scout-ai.netlify.app/privacy.html).
 
 ## Install

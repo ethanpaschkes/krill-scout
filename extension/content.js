@@ -203,14 +203,13 @@ function update(prompt, picks, source, final = true) {
 
 const PICKS = 10;
 
-// Deep Dive mode (unlocked with a cheat code in the 🦐 menu): only picks the model rates as likely Deep Cuts.
+// Deep Dive mode (switch in the 🦐 menu): only picks the model rates as likely Deep Cuts.
 // On 40 dives it never saw, picks rated 45%+ were real Deep Cuts about twice as often as average, 70%+ about 3x.
 const DEEP_MIN = 0.45;
 let deepMode = false;
-const readDeepMode = () =>
-  chrome.storage.local.get(["deepMode", "deepUnlocked"]).then((s) => (deepMode = s.deepUnlocked === true && s.deepMode === true));
+const readDeepMode = () => chrome.storage.local.get("deepMode").then((s) => (deepMode = s.deepMode === true));
 readDeepMode();
-chrome.storage.onChanged?.addListener((c) => (c.deepMode || c.deepUnlocked) && readDeepMode());
+chrome.storage.onChanged?.addListener((c) => c.deepMode && readDeepMode());
 
 // The final 10 from a ranked list. In Deep Dive mode: only likely Deep Cuts, the most likely first.
 function finish(ranked) {

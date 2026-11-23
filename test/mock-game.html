@@ -8,7 +8,7 @@
 <script>
 // Stand-ins for the extension APIs, so the real extension files run unchanged on this page.
 const deep = location.search.includes("deep");
-const store = { autoType: true, deepUnlocked: deep, deepMode: deep };
+const store = { autoType: true, deepMode: deep };
 window.chrome = {
   storage: { local: {
     get: async (k) => (typeof k === "string" ? { [k]: store[k] } : Object.fromEntries(k.map((x) => [x, store[x]]))),
